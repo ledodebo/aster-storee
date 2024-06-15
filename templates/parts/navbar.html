@@ -1,4 +1,5 @@
 {% load static %}
+
 <link 
 href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"  type='text/css'>
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
@@ -34,6 +35,10 @@ href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.
 		}
 		document.cookie ='device=' + device + ";domain=;path=/"
 	</script>
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5382065431714620"
+     crossorigin="anonymous"></script>
+</head>
 <header  class="header_area ">
     <div class="main_menu">
       <nav class="navbar navbar-expand-lg navbar-light">
@@ -48,7 +53,14 @@ href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.
           <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
             <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
               <li class="nav-item"><a class="nav-link" href="{%url 'home' %}">Home</a></li>
-              <li class="nav-item"><a class="nav-link" href="{%url 'cag' %}">shopping</a></li>
+              <li class="nav-item submenu dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                  aria-expanded="false">Shopping</a>
+                <ul class="dropdown-menu">
+                  <li class="nav-item"><a class="nav-link" href="{%url 'cag'  %}">Shop Category</a></li>
+                  <li class="nav-item"><a class="nav-link" href="{% url 'view_cart' %}">Shopping Cart</a></li>
+                </ul>
+							</li>
 							<li class="nav-item active submenu dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                   aria-expanded="false">Pages</a>
