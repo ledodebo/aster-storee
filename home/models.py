@@ -10,14 +10,10 @@ from django.conf import settings
 from django_resized import ResizedImageField
 
 
-
-
 class Category(models.Model):
     name = models.CharField(max_length=50)
     def __str__(self) :
         return self.name
-    
-
 
 class size(models.Model):
     name = models.CharField(max_length=50)
@@ -38,7 +34,7 @@ class checked(models.Model):
 
 class product(models.Model):
     name=models.CharField(max_length=50)
-    image= ResizedImageField(size=[ 1578, 2723],upload_to="uploads/product")
+    image= ResizedImageField(size=[ 1578, 2723],crop= ["middle", "center"],,upload_to="uploads/product")
    
     descretion=models.CharField(max_length=250,default="",blank=True,null=True)
     
@@ -77,22 +73,11 @@ class ProductVariation(models.Model):
     def __str__(self):
         return f"{self.product.name} - {self.size} - {self.type}"
         
-
-
-
-
-
 class gust(models.Model):
     name = models.CharField(max_length=100)
-    #usser = models.OneToOneField(User,on_delete=models.CASCADE)
-    #phone=models.CharField(max_length=50)
     device = models.CharField(max_length=100)
-    #catagofavry=models.ForeignKey(product,on_delete=models.CASCADE,null=True)
-    #order = customer=models.ForeignKey(order,on_delete=models.CASCADE,null=True)
     def __str__(self) :
         return self.device
-    
-
 
 class CartItem(models.Model):
     ProductVariation = models.ForeignKey(ProductVariation, on_delete=models.CASCADE)
