@@ -131,20 +131,9 @@ def producct(requst,pk):
 def index(requst):   
     prodcu = ProductVariation.objects.filter(ava=True)
     print (prodcu)
-    offer = 0
-    message = ("شحن مجاني لاي اوردر فوق ال 1000")
-    cart = CartItem.objects.all()
-    if requst.user.is_authenticated:
-        cart_items = CartItem.objects.filter(user=requst.user)
-        total_price = sum(item.ProductVariation.discount * item.quantity for item in cart_items)
-        offer = round(1000-total_price)
-        if total_price > 1:
-            offer = round(1000-total_price)
-            message = ("فاضلك "+(str(offer))+" عشان العرض يكمل")
-        if total_price >= 1000 :
-            message = ("دلوقتي ليك شحن مجاني")
+  
     return render(requst,"html/index.html",{'product':prodcu,
-                                            'offer':message})
+                                          })
 #___________________________________________________________________________________
 def login_usr(requst):
     if requst.method == "POST":
