@@ -34,7 +34,7 @@ class checked(models.Model):
 
 class product(models.Model):
     name=models.CharField(max_length=50)
-    image= ResizedImageField(size=[ 1578, 2723],crop= ["middle", "center"],upload_to="uploads/product", force_format='PNG')
+    image= ResizedImageField(size=[ 300, 300],crop= ["middle", "center"],upload_to="uploads/product", force_format='PNG')
    
     descretion=models.CharField(max_length=250,default="",blank=True,null=True)
     
