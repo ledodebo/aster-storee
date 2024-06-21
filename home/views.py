@@ -12,6 +12,32 @@ from accounts .models import customer
 from .models import gust,order as o
 from .context_processors import items_count
 from django.shortcuts import get_object_or_404
+import datetime
+
+
+def get_arabic_day_name(date):
+    arabic_days = {
+        0: "الإثنين",
+        1: "الثلاثاء",
+        2: "الأربعاء",
+        3: "الخميس",
+        4: "الجمعة",
+        5: "السبت",
+        6: "الأحد"
+    }
+    return arabic_days[date.weekday()]
+
+def get_expected_delivery_date():
+    today = datetime.date.today()
+    if today.weekday() == 4:  # Friday
+        expected_date = today + datetime.timedelta(days=2)
+    elif today.weekday() == 5:  # Saturday
+        expected_date = today + datetime.timedelta(days=1)
+    else:
+        expected_date = today + datetime.timedelta(days=2)
+    
+    return get_arabic_day_name(expected_date)
+
 #________________________________________________________________________________________________________________________________________________________
 def checkout(requset):
     form = order()
@@ -81,6 +107,7 @@ def register_usr(requset):
 #___________________________________________________________________________________
 
 def catagory(requset):
+    count = items_count(requset)
     a = ProductVariation.objects.filter(ava=True)
     f = ProductFilter(requset.GET, queryset=a)
     #s = product.objects.filter(name__icontains="tobakco")
@@ -89,7 +116,7 @@ def catagory(requset):
         return redirect('search',pk=search_query)
     context = {"filter":f,
                "p":a,
-                     
+                'offer':count['offer'],     
                }
     return render (requset,"html/category.html",context)
 
@@ -104,6 +131,8 @@ def search(requset,pk):
     return render (requset,"html/search.html",context)
 #___________________________________________________________________________________
 def producct(requst,pk):
+    expected_delivery_date = get_expected_delivery_date()
+    count = items_count(requst)
     prodcu = product.objects.get(id=pk)
     ts = ProductVariation.objects.get(product=prodcu,ava=True)
     pv = ProductVariation.objects.filter(product=prodcu)
@@ -124,16 +153,19 @@ def producct(requst,pk):
         'rl':ge,
         'discount':d,
         "pv":pv,
-        "ch":ch
+        "ch":ch,
+        'offer':count['offer'], 
+        "d_days":expected_delivery_date,
     }
     return render(requst,"html/product.html",context)
 #___________________________________________________________________________________
 def index(requst):   
     prodcu = ProductVariation.objects.filter(ava=True)
     print (prodcu)
+   
   
     return render(requst,"html/index.html",{'product':prodcu,
-                                          })
+                                            })
 #___________________________________________________________________________________
 def login_usr(requst):
     if requst.method == "POST":
@@ -179,7 +211,7 @@ def add_to_cart(request):
        cart_item.save()
        count = items_count(request)
       # messages.success(request,'تم اضافة المنتج بنجاح')
-       return JsonResponse ( {'items_count':count['items_count']})
+       return JsonResponse ( {'items_count':count['items_count'],'offer':count['offer']})
        #return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
    else :
@@ -190,41 +222,43 @@ def add_to_cart(request):
          cart_item.save()
          count = items_count(request)
          #messages.error(request,"من فضلك قم بتسجيل الدخول اولا")
-         return JsonResponse ( {'items_count':count['items_count']})
+         return JsonResponse ( {'items_count':count['items_count'],'offer':count['offer']})
 #___________________________________________________________________________________
 def remove_iteam(request):
     id = request.GET.get("id")
+    count = items_count(request)
     Product = ProductVariation.objects.get(id=id)
     if request.user.is_authenticated:
          cart_item, created = CartItem.objects.get_or_create(ProductVariation=Product, user=request.user)
          if cart_item.quantity == 1:
             cart_item.delete()
-            return JsonResponse ( {'items_count':cart_item.quantity})
+            return JsonResponse ( {'items_count':cart_item.quantity,'offer':count['offer']})
          else:
           cart_item.quantity -= 1
           cart_item.save()
-          return JsonResponse ( {'items_count':cart_item.quantity})
+          return JsonResponse ( {'items_count':cart_item.quantity,'offer':count['offer']})
          
     else:
          device = request.COOKIES['device']
          cart_item, created = CartItem.objects.get_or_create(ProductVariation=Product, device=device)
          if cart_item.quantity == 1:
             cart_item.delete()
-            return JsonResponse ( {'items_count':cart_item.quantity})
+            return JsonResponse ( {'items_count':cart_item.quantity,'offer':count['offer']})
          else:
           cart_item.quantity -= 1
           cart_item.save()
-          return JsonResponse ( {'items_count':cart_item.quantity})
+          return JsonResponse ( {'items_count':cart_item.quantity,'offer':count['offer']})
 #___________________________________________________________________________________
 
 def add_iteam(request):
+    count = items_count(request)
     if request.user.is_authenticated:
         id = request.GET.get("id")
         Product = ProductVariation.objects.get(id=id)
         cart_item, created = CartItem.objects.get_or_create(ProductVariation=Product, user=request.user)
         cart_item.quantity += 1 
         cart_item.save()
-        return JsonResponse ( {'items_count':cart_item.quantity})
+        return JsonResponse ( {'ittems_count':cart_item.quantity,'offer':count['offer']})
     
     else:
         device = request.COOKIES['device']
@@ -233,17 +267,18 @@ def add_iteam(request):
         cart_item, created = CartItem.objects.get_or_create(ProductVariation=Product, device=device)
         cart_item.quantity += 1 
         cart_item.save()
-        return JsonResponse ( {'ittems_count':cart_item.quantity})
+        return JsonResponse ( {'ittems_count':cart_item.quantity,'offer':count['offer']})
 #___________________________________________________________________________________
 
 def delete_cart_item(request):
+  count = items_count(request)
   if request.method == 'GET':
         try:
             cart_item_id = request.GET.get('cart_item_id')
             cart_item = get_object_or_404(CartItem, id=cart_item_id)
             cart_item.delete()
             count = items_count(request)
-            return JsonResponse({'success': True,'items_count':count['items_count']})
+            return JsonResponse({'success': True,'items_count':count['items_count'],'offer':count['offer']})
         except CartItem.DoesNotExist:
             return JsonResponse({'error': 'CartItem does not exist'}, status=404)
         except Exception as e:
