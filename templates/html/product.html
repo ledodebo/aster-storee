@@ -44,14 +44,17 @@
 					
 					<div class="s_product_text">
 						<h3 id="name" >{{pk.name}}</h3>
-						<h2 id="price" >{{i.discount}}EGP{{discount}}%-OFF</h2>
+						<h2 id="price" >{{i.discount}}EGP /{{discount}}%-OFF</h2>
 						<h3 style="text-decoration: line-through;"  >{{i.price}}EGP</h3>
 						<ul class="list">
-							<li><a class="active" href="#"><span>Size</span> : {{i.size}}</a></li>
-							<li><a class="active" href="#"><span>Category</span> : {{i.Category}}</a></li>
+							<li><a class="active" href=""><span>Size</span> : {{i.size}}</a></li>
+							<li><a class="active" href=""><span>Category</span> : {{i.Category}}</a></li>
+          
 							<li><a href="#"><span>Availibility</span> : In Stock</a></li>
+              <li><a class="active" href=""><span> deliver on</span> : {{d_days}}</a></li>  
 						</ul>
             {% endfor %}
+        
             <style>
               input {
 color: #693a86;
@@ -81,15 +84,17 @@ box-shadow: 0 0 0 1px #693a86;
 						</div>
 						
 						  {% for i in pv %}
-						  <div class="card" style="margin-top: 10px;">
-							<div class="card-body" style="border: 0.5px solid; border-color: #693a86;text-align: center;font-size: 15px;color: black;">
-							<input class="form-check-input" {{i.ava}} type="radio" name="type"  value="{{i.id}}" id=""><span style="color: black;"> Size: </span> {{i.size}} --<span style="color: black;"> Type: </span> {{i.type}}
+						  <div class="card" style="margin-top: 10px; ">
+							<div class="card-body" style="border: 0.5px solid; border-color: #693a86;text-align: center;font-size: 15px;color: black; font-weight: 900;letter-spacing: 0.3px;">
+							<input class="form-check-input" {{i.ava}} type="radio" name="type"  value="{{i.id}}" id=""><span style="color: black;"> Size: </span> {{i.size}} --<span style="color: black;"> Type: </span> {{i.type}}--<span style="color: black;"> PRICE: </span> {{i.discount}}
 							</div>
 						  </div>
               <span style="display: none;" id="idd">{{i.id}}</span>
 						  {% endfor %}
+             
 						<a class="btn" style="margin-top: 10px;margin-bottom: 10px;color: white;" id="add-to-cart" >اضف الي السلة</a>   
-						<button class="btn" style="margin-top: 10px;margin-bottom: 10px;color: white;background-color:#7c11f0;" id="add-to-cart" onclick="pvi()" >اشتري دلوقتي</button>   	          
+						<button class="btn" style="margin-top: 10px;margin-bottom: 10px;color: white;background-color:#7c11f0;" id="add-to-cart" onclick="pvi()" >اشتري دلوقتي</button>
+               	          
 						</div>
             &nbsp;
             &nbsp;
@@ -205,6 +210,7 @@ box-shadow: 0 0 0 1px #693a86;
             const id = checkedOption.value;
             const qty = $("#form1").val();
             const thisButton = $(this);
+            let offerm = $("#offer")
             console.log("id", id);
             console.log("qty", qty);
             console.log("count", itemCount);
@@ -218,6 +224,7 @@ box-shadow: 0 0 0 1px #693a86;
                 success: function(response) {
                     thisButton.html("تم اضافة المنتج");
                     itemCount.text(response.items_count);
+                    offerm.text(response.offer)
                     Toastify({
                         text: "تم اضافة المنتج بنجاح",
                         duration: 2000,
