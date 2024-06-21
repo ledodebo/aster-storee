@@ -82,16 +82,16 @@
             </div>  
           </form>          <!-- End Filter Bar -->
           <!-- Start Best Seller -->
-          <section class=" ">
-            &nbsp;
+          <section style="text-align: center;"  class=" ">
+           
             <div class="row">
               {% for i in filter.qs  %}
-              &nbsp;
-              &nbsp;
-            &nbsp;
+           
               <div class="">
 
-                <div class="card text-center card-product">
+                <div  class="card ddddd text-center card-product">
+                  &nbsp;
+                  &nbsp;
                   <div class="card-product__img">
                     <img class="card-img"   style="width: 9rem;" src="{{i.product.image.url}}" alt="">
                     <ul class="card-product__imgOverlay">
@@ -140,6 +140,13 @@
       </div>
     </div>
   </section>
+  <style>
+   @media only screen and (max-width: 433px){
+    .ddddd{
+        margin-left : 30px;
+    }
+}
+  </style>
 	<!-- ================ Subscribe section end ================= -->		  
   <!--================ Start footer Area  =================-->	
 {% include "parts/footer.html" %}
