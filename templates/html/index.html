@@ -188,62 +188,63 @@
 	 {% include "parts/footer.html" %}
 	<!--================ End footer Area  =================-->
   <script>
-    $(".add-to-cart").on('click',function(){
-      let qty  = $("#form1").val()
-      let offerm = $("#offer")
-      let name = $(this)
-      let id = name.attr("data-index")
-      let this_b = $(".added")
-      var added = $('#id-' + id);
-      console.log (name)
-      let iteam_count = $('#count')
-      console.log("id",id);
-      console.log("qty",qty);
-      console.log("count",iteam_count);
-      console.log(this_b)
-      $.ajax({
-        url : "add/",
-        data:{
-          'id' : id,
-          'qty' : qty,
-        },
-        dataType:'json',
-        success : function(response){
-          console.log("id",id)
-          iteam_count.text(response.items_count)
-          added.text("تم اضافة المنتج")
-          offerm.text(response.offer)
-           Toastify({
-  text: "تم اضافة المنتج بنجاح",
-  duration: 2000,
-  newWindow: false,
-  close: true,
-  gravity: "bottom", // `top` or `bottom`
-  position: "center", // `left`, `center` or `right`
-  stopOnFocus: true, // Prevents dismissing of toast on hover
-  style: {
-    background: "#693a86",
-  },
-  onClick: function(){} // Callback after click
-}).showToast();
-        }
-      })
-    })
+  $(document).ready(function() {
+    $(".add-to-cart").each(function() {
+        let element = $(this);
 
+        element.off('click touchstart').on('click touchstart', function(event) {
+            // Prevent the default action for the touchstart event
+            if (event.type === 'touchstart') {
+                event.preventDefault();
+            }
 
+            // Prevent the default action for the click event if it's a touch event
+            if (event.type === 'click' && event.originalEvent.detail === 0) {
+                return;
+            }
 
-    const observer = new IntersectionObserver((entries) =>{
-      entries.forEach((entry) =>{
-        console.log(entry)
-        if (entry.isIntersecting){
-            entry.target.classList.add('show');
+            let qty = $("#form1").val();
+            let offerm = $("#offer");
+            let name = $(this);
+            let id = name.attr("data-index");
+            let added = $('#id-' + id);
+            let iteam_count = $('#count');
 
-        }else{
-          entry.target.classList.remove('show');
-        }
-      });
+            console.log("name", name);
+            console.log("id", id);
+            console.log("qty", qty);
+            console.log("count", iteam_count);
+
+            $.ajax({
+                url: "add/",
+                data: {
+                    'id': id,
+                    'qty': qty,
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log("id", id);
+                    iteam_count.text(response.items_count);
+                    added.text("تم اضافة المنتج");
+                    offerm.text(response.offer);
+                    Toastify({
+                        text: "تم اضافة المنتج بنجاح",
+                        duration: 1500,
+                        newWindow: false,
+                        close: true,
+                        gravity: "bottom", // `top` or `bottom`
+                        position: "center", // `left`, `center` or `right`
+                        stopOnFocus: true, // Prevents dismissing of toast on hover
+                        style: {
+                            background: "#693a86",
+                        },
+                        onClick: function() {} // Callback after click
+                    }).showToast();
+                }
+            });
+        });
     });
-
+});
     const hiddenelemnt = document.querySelectorAll('.section-margin')
     hiddenelemnt.forEach((el) => observer.observe(el));
    
