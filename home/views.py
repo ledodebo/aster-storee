@@ -160,7 +160,7 @@ def producct(requst,pk):
     return render(requst,"html/product.html",context)
 #___________________________________________________________________________________
 def index(requst):   
-    prodcu = ProductVariation.objects.filter(ava=True)
+    prodcu = ProductVariation.objects.filter(ava=True)[:4]
     print (prodcu)
    
   
