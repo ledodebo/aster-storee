@@ -8,6 +8,7 @@ body{
     line-height:1.667;
    
 }
+
 .whats-app {
     position: fixed;
     width: 50px;
@@ -4017,7 +4018,7 @@ a{
     }
 }
 .footer-bottom{
-    background:rgb(121 12 240 / 98%);
+    background:rgb(93 35 157 / 98%);
     padding:32px
 }
 .footer-bottom .footer-text{
