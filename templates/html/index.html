@@ -187,7 +187,48 @@
   <!--================ Start footer Area  =================-->	
 	 {% include "parts/footer.html" %}
 	<!--================ End footer Area  =================-->
+  <style>
+    .observed {
+   
+        opacity: 0;
+        transition: opacity 1s;
+    }
+
+    .observed.visible {
+        opacity: 1;
+    }
+</style>
   <script>
+
+document.addEventListener('DOMContentLoaded', () => {
+        // Options for the observer
+        const options = {
+            root: null, // Use the viewport as the root
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        // Callback function to execute when elements are observed
+        const callback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Add the 'visible' class to the observed element
+                    entry.target.classList.add('visible');
+                } else {
+                    // Optionally, remove the 'visible' class when the element is not in view
+                    entry.target.classList.remove('visible');
+                }
+            });
+        };
+
+        // Create an Intersection Observer
+        const observer = new IntersectionObserver(callback, options);
+        // Observe each element
+        const elements = document.querySelectorAll('.observed ');
+        elements.forEach(element => {
+            observer.observe(element);
+        });
+    });
   $(document).ready(function() {
     $(".add-to-cart").each(function() {
         let element = $(this);
