@@ -85,20 +85,20 @@ box-shadow: 0 0 0 1px #693a86;
 						
 						  {% for i in pv %}
 						  <div class="card" style="margin-top: 10px; ">
-							<div class="card-body" style="border: 0.5px solid; border-color: #693a86;text-align: center;font-size: 15px;color: black; font-weight: 700;letter-spacing: 0.3px;">
+							<div class="card-body" style="border: 0.5px solid; border-color: #693a86;text-align: center;font-size: 10px;color: black; font-weight: 900;letter-spacing: 0.3px;">
 							<input class="form-check-input" {{i.ava}} type="radio" name="type"  value="{{i.id}}" id=""><span style="color: black;"> Size: </span> {{i.size}} --<span style="color: black;"> Type: </span> {{i.type}}--<span style="color: black;"> PRICE: </span> {{i.discount}}
 							</div>
 						  </div>
               <span style="display: none;" id="idd">{{i.id}}</span>
 						  {% endfor %}
              
-						<a class="btn" style="margin-top: 10px;margin-bottom: 10px;color: white;" id="add-to-cart" >اضف الي السلة</a>   
-						<button class="btn" style="margin-top: 10px;margin-bottom: 10px;color: white;background-color:#7c11f0;" id="add-to-cart" onclick="pvi()" >اشتري دلوقتي</button>
+						<a  class="btn"  style="margin-top: 10px;margin-bottom: 10px;color: white;font-size: 17px;" id="add-to-cart" >اضف الي السلة</a>   
+						<button class="btn" style="margin-top: 10px;margin-bottom: 10px;color: white;background-color:#432861;font-size: 17px;" id="add-to-cart" onclick="pvi()" >اشتري دلوقتي</button>
                	          
 						</div>
             &nbsp;
             &nbsp;
-          
+            <p>{{pk.descretion}}</p>
 						<span  style="color: white;">{{pk.id}}</span>		  
 				</div>
 			</div>
@@ -140,7 +140,7 @@ box-shadow: 0 0 0 1px #693a86;
             <div class="single-search-product d-flex">
               <a href="{% url 'products' pk.id  %}"><img src="{{i.product.image.url}}"alt=""></a>
               <div class="desc">
-                  <a href="{% url 'products' i.product.id %}" id="name" class="title">{{i.product.name}}</a>
+                  <a href="{% url 'products' pk.id  %}" id="name" class="title">{{i.product.name}}</a>
                   <div class="price">{{i.discount}}EGP</div>
               </div>
             </div>
