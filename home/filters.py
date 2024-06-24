@@ -6,7 +6,7 @@ class ProductFilter(django_filters.FilterSet):
     class Meta:
         model = (ProductVariation)
         fields = '__all__'
-        exclude = ["ava","name","discount","price","product"]
+        exclude = ["ava","name","discount","price","product","type"]
 
 
 """    
