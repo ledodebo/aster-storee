@@ -112,7 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to animate text
   const animateText = (element, intervalTime) => {
     let iter = 0;
-    const interval = setInterval(() => {
+    let animationFrameId;
+
+    const animate = () => {
       element.innerText = element.innerText.split("")
         .map((letter, index) => {
           if (index < iter) {
@@ -121,19 +123,24 @@ document.addEventListener('DOMContentLoaded', () => {
           return letters[Math.floor(Math.random() * letters.length)]; // use the entire letters array
         })
         .join("");
-      if (iter >= element.dataset.value.length) clearInterval(interval);
+
       iter += 1 / 3;
-    }, intervalTime);
+      if (iter < element.dataset.value.length) {
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
   };
 
-  
   const handleAnimation = (element, delay) => {
     setTimeout(() => {
       animateText(element, 30);
     }, delay);
   };
 
-  
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -151,6 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
   observer.observe(event);
   observer.observe(event2);
 });
+
 				  </script>
 			</div>
 		</div>
