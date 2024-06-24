@@ -109,35 +109,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const event = document.querySelector("var");
   const event2 = document.querySelector("pp");
 
-  // Function to animate text
   const animateText = (element, intervalTime) => {
     let iter = 0;
-    let animationFrameId;
+    const length = element.dataset.value.length;
 
-    const animate = () => {
-      element.innerText = element.innerText.split("")
-        .map((letter, index) => {
-          if (index < iter) {
-            return element.dataset.value[index];
-          }
-          return letters[Math.floor(Math.random() * letters.length)]; // use the entire letters array
-        })
-        .join("");
-
+    const updateText = () => {
+      let displayText = '';
+      for (let i = 0; i < length; i++) {
+        if (i < iter) {
+          displayText += element.dataset.value[i];
+        } else {
+          displayText += letters[Math.floor(Math.random() * letters.length)];
+        }
+      }
+      element.innerText = displayText;
       iter += 1 / 3;
-      if (iter < element.dataset.value.length) {
-        animationFrameId = requestAnimationFrame(animate);
-      } else {
-        cancelAnimationFrame(animationFrameId);
+      if (iter < length) {
+        setTimeout(updateText, intervalTime);
       }
     };
 
-    animationFrameId = requestAnimationFrame(animate);
+    updateText();
   };
 
   const handleAnimation = (element, delay) => {
     setTimeout(() => {
-      animateText(element, 30);
+      animateText(element, 50); // Increase intervalTime for less frequent updates
     }, delay);
   };
 
@@ -154,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { threshold: 0.1 });
 
-  // Observe the elements
   observer.observe(event);
   observer.observe(event2);
 });
